@@ -1,0 +1,14 @@
+.main-content {
+  padding: 3rem;
+}
+
+.card.content-structure .card-content ol {
+  margin-left: 24px;
+}
+.card.content-structure .card-content ol li ol {
+  margin-top: 8px;
+}
+
+.card.content-structure {
+  margin-bottom: 1rem;
+}

@@ -1,0 +1,60 @@
+{{$home := .GetPage "/_index.md" }}
+<div class="card content-structure">
+  <header class="card-header">
+    <span class="card-header-title">
+      Content Structure
+    </span>
+    <a href="#collapsible-card" data-action="collapse" class="card-header-icon is-hidden-fullscreen" aria-label="more options">
+      Show / Hide
+    </a>
+  </header>
+  <div id="collapsible-card" class="is-collapsible is-active">
+    <div class="card-content">
+      {{ template "content-structure" (dict "currentLevel" $home "currentPage" . "level" 0 ) }}
+      
+    </div>
+  </div>
+</div>
+
+{{ define "structure" }}
+  {{ $level := .level }}
+  {{ $currentLevel := .currentLevel }}
+  {{ $currentPage := .currentPage }}
+{{ end }}
+
+{{ define "content-structure" }}
+  {{ $level := .level }}
+
+  {{ $currentLevel := .currentLevel }}
+  {{ $currentPage := .currentPage }}
+
+  {{ if $currentLevel.IsNode }}
+    {{ $children := $currentLevel.Pages }}
+    <span class="{{cond $currentLevel.IsHome "is-size-4" "" }}">
+      <a href="{{$currentLevel.Permalink}}"  class="{{ cond (eq $currentPage $currentLevel) "has-text-danger has-text-weight-bold" ""}}">
+        {{$currentLevel.Title}}
+      </a>
+      {{with $currentLevel.File}}<span class="has-text-grey-light"> {{.}}</span>{{end}}
+    </span>
+    <ol>
+    {{ range $children }}
+      {{ if .IsNode }}
+      <li>
+        {{template "content-structure" (dict "currentLevel" . "currentPage" $currentPage "level" (add 1 $level) ) }}
+      </li>
+      {{ else }}
+      <li>
+        <a href="{{$currentLevel.Permalink}}"  class="{{ cond (eq . $currentPage) "has-text-danger has-text-weight-bold" ""}}">
+          {{ .Title }}
+        </a>
+        {{with .File}}<span class="has-text-grey-light"> {{.}}</span>{{end}}
+      </li>
+      {{ end }}
+    {{ end }}
+  </ol>
+
+  {{ end }}
+
+<!-- End template -->
+{{ end }}
+
